@@ -18,7 +18,7 @@
 </head>
 <body>
 	<p>This is a port of <a href="http://binarymuse.github.io/react-primer/build/index.html?6" target="_blank">binarymuse's shouldComponentUpdate demo for React</a>.
-	<p>Using IncrementalDOM.skip method we can let an element act as a root which descendants don't need to be diffed for updates. Simply set a { skip: true, ... } attribute on such element. Generation of the descendants JSONML can be saved as well as it becomes irrelevant, though this is not mandatory.</p>
+	<p>Using IncrementalDOM.skip method we can let an element act as a root which descendants don't need to be diffed for updates. Simply set a { _skip: true, ... } attribute on such element. Generation of the descendants JSONML can be saved as well as it becomes irrelevant, though this is not mandatory.</p>
 	<p>Animation updates state for head item plus another random item, several ticks are batched before the next animationFrame collects them, this would be impossible to run at high fps without skipping the diff (the head is always animated to keep chrome's fps stats refreshing).</p>
 	<p><strong>Since Chrome 46 creating more than 100 range inputs on touch enabled devices will destroy performance, <a href="https://github.com/GoogleChrome/devtools-docs/issues/65#issuecomment-159470199" target="_blank">reason unclear</a>, to restore smooth performance temporarily turn off "Enable touch events" in chrome://flags, this applies to both the original React demo and this JSONML port.</strong></p>
 

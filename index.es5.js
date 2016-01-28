@@ -4,11 +4,12 @@ var jsonml = (function () {
 	var elementOpenStart = IncrementalDOM.elementOpenStart
 	var elementOpenEnd = IncrementalDOM.elementOpenEnd
 	var elementClose = IncrementalDOM.elementClose
+	var currentElement = IncrementalDOM.currentElement
 	var skip = IncrementalDOM.skip
 	var attr = IncrementalDOM.attr
 	var text = IncrementalDOM.text
 
-	function _openTag(head, _key) {
+	function openTag(head, keyAttr) {
 		var dotSplit = head.split('.')
 		var hashSplit = dotSplit[0].split('#')
 
@@ -16,46 +17,51 @@ var jsonml = (function () {
 		var id = hashSplit[1]
 		var className = dotSplit.slice(1).join(' ')
 
-		elementOpenStart(tagName, _key)
+		elementOpenStart(tagName, keyAttr)
+
 		if (id) attr('id', id)
 		if (className) attr('class', className)
 
 		return tagName
 	}
 
-	function _applyAttrsObj(attrsObj) {
+	function applyAttrsObj(attrsObj) {
 		for (var k in attrsObj) {
-			if (k === '_key' || k === '_skip') continue
 			attr(k, attrsObj[k])
 		}
 	}
 
-	function _jsonml(markup) {
+	function parse(markup) {
 		var head = markup[0]
 		var attrsObj = markup[1]
 		var hasAttrs = attrsObj && attrsObj.constructor === Object
 		var firstChildPos = hasAttrs ? 2 : 1
-		var _key = hasAttrs && attrsObj._key
-		var _skip = hasAttrs && attrsObj._skip
+		var keyAttr = hasAttrs && attrsObj.key
+		var skipAttr = hasAttrs && attrsObj.skip
 
-		var tagName = _openTag(head, _key)
+		var tagName = openTag(head, keyAttr)
 
-		if (hasAttrs) _applyAttrsObj(attrsObj)
+		if (hasAttrs) applyAttrsObj(attrsObj)
 
 		elementOpenEnd()
 
-		if (_skip) {
+		if (skipAttr) {
 			skip()
 		} else {
 			for (var i = firstChildPos, len = markup.length; i < len; i++) {
 				var node = markup[i]
 
-				if (!node) continue
+				if (node === undefined) continue
 
-				if (Array.isArray(node)) {
-					_jsonml(node)
-				} else {
-					text(node)
+				switch (node.constructor) {
+					case Array:
+						parse(node)
+						break
+					case Function:
+						node(currentElement())
+						break
+					default:
+						text(node)
 				}
 			}
 		}
@@ -63,5 +69,5 @@ var jsonml = (function () {
 		elementClose(tagName)
 	}
 
-	return _jsonml
+	return parse
 })();
