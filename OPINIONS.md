@@ -26,7 +26,7 @@ What's really interesting is that memory behaves very well too, the array descri
 The transpiled approaches generating the Incremental DOM code from templating languages at build time will always have the last word here, but unless you're constrained by extreme performance/memory limitations this should not be of any concern.
 
 ##### Incremental DOM is still experimental
-The stability of the JSONML format somewhat protects from Incremental DOM experimental status. Still things like *_key*, *_skip*, *statics/dynamic properties* assignment, and eventual new features or better understanding may vary this repo.
+The stability of the JSONML format somewhat protects from Incremental DOM experimental status. Still things like *key, skip, statics vs dynamic attributes/properties* assignment, and eventual new features or better understanding may vary this repo.
 
 ##### Compatibility with standard JSONML code
 Only one attributes object at position 1 of the element's array is allowed. Standard JSNOML doesn't specify this, so [most parsers](https://gist.github.com/paolocaminiti/a828900d1e9dad44f97b) will allow multiple attributes objects to be scattered anywhere after the head. Implementing this with Incremental DOM would be a performance hit on long child lists, and frankly I never used it.
