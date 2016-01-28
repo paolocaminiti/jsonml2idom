@@ -1,0 +1,29 @@
+{
+  "name": "jsonml2idom",
+  "version": "0.3.0",
+  "description": "JSONML IncrementalDOM interpreter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paolocaminiti/jsonml2idom.git"
+  },
+  "keywords": [
+    "jsonml",
+    "incremental-dom",
+    "template",
+    "view",
+    "html"
+  ],
+  "author": "Paolo Caminiti <paolo.caminiti@gmail.com> (https://github.com/paolocaminiti)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paolocaminiti/jsonml2idom/issues"
+  },
+  "homepage": "https://github.com/paolocaminiti/jsonml2idom#readme",
+  "dependencies": {
+    "incremental-dom": "^0.3.0"
+  }
+}

@@ -1,0 +1,122 @@
+<html>
+<head>
+	<style type="text/css">
+		.item {
+			border: 1px solid #000;
+			height: 70px;
+			display: block;
+			padding: 20px;
+			margin: 10px 0;
+		}
+	</style>
+
+	<script src="../../node_modules/incremental-dom/dist/incremental-dom-min.js"></script>
+	<script src="../../index.es5.js"></script>
+
+	<script src="transformers.js"></script><!-- :) -->
+	<script src="updater.js"></script>
+</head>
+<body>
+	<p>This is a port of <a href="http://binarymuse.github.io/react-primer/build/index.html?6" target="_blank">binarymuse's shouldComponentUpdate demo for React</a>.
+	<p>Using IncrementalDOM.skip method we can let an element act as a root which descendants don't need to be diffed for updates. Simply set a { skip: true, ... } attribute on such element. Generation of the descendants JSONML can be saved as well as it becomes irrelevant, though this is not mandatory.</p>
+	<p>Animation updates state for head item plus another random item, several ticks are batched before the next animationFrame collects them, this would be impossible to run at high fps without skipping the diff (the head is always animated to keep chrome's fps stats refreshing).</p>
+	<p><strong>Since Chrome 46 creating more than 100 range inputs on touch enabled devices will destroy performance, <a href="https://github.com/GoogleChrome/devtools-docs/issues/65#issuecomment-159470199" target="_blank">reason unclear</a>, to restore smooth performance temporarily turn off "Enable touch events" in chrome://flags, this applies to both the original React demo and this JSONML port.</strong></p>
+
+	<div id="approot"></div>
+
+<script>
+"use scrict";
+
+var approot = document.getElementById('approot')
+
+function randomItem() {
+	return {
+		id: Math.random() * Date.now(),
+		width: 200 + Math.floor(Math.random() * 800),
+		color: '#' + Math.random().toString(16).substr(-6)
+	}
+}
+
+// a serializable central state
+var state = {
+	items: [
+		randomItem()
+	],
+	menu: {
+		addManyCount: 1000,
+	}
+}
+
+// fragments
+function item(i) {
+	var shouldUpdate = up.check(i)
+	var computedStyle = 'background: ' + i.color + '; width: ' + i.width + 'px';
+
+	return ['span', { key: i.id, skip: !shouldUpdate }].concat(shouldUpdate && [
+				['div.item', { style: computedStyle },
+					['div',
+						['input', {
+							type: 'text',
+							value: i.color,
+							oninput: transformers.item.colorChange,
+							ref: i
+						}]
+					],
+					['div',
+						['input', {
+							type: 'range', min: '200', max: '1000',
+							value: new String(i.width),
+							oninput: transformers.item.widthChange,
+							// explorer range inputs will only fire on change
+							onchange: transformers.item.widthChange,
+							ref: i
+						}]
+					],
+					['div.content', i.width],
+					['div',
+						['button', { onclick: transformers.item.remove, ref: i }, 'remove']
+					]
+				]
+			])
+}
+
+function list(items) {
+	return items.map(item)
+}
+
+function menu(s) {
+	var shouldUpdate = up.check(s.menu)
+
+	return ['div#menu', { key: 'appmenu', skip: !shouldUpdate }].concat(shouldUpdate && [
+				['input', { oninput: transformers.list.addManyCount, value: s.menu.addManyCount }],
+				['button', { onclick: transformers.list.addMany },
+					'add to state.items' + ' (' + s.items.length + ')'
+				],
+				['button', { onclick: transformers.list.flush }, 'flush state.items'],
+				['button', { onclick: transformers.state.flush }, 'flush localStorage.state'],
+				['button', { onclick: transformers.state.animate }, 'animate']
+			])
+}
+
+function app(s) {
+	return ['span',	menu(s)].concat(list(s.items))
+}
+
+// render update
+function update() {
+	IncrementalDOM.patch(approot, jsonml, app(state))
+}
+
+// state persistance
+if (localStorage.state) state = JSON.parse(localStorage.state)
+window.__persistState = true
+window.addEventListener('beforeunload', function () {
+	if (__persistState) localStorage.state = JSON.stringify(state)
+})
+
+// bootstrap updates
+var up = Updater(update)
+up.batch()
+</script>
+</body>
+</html>
