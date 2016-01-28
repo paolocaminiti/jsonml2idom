@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Circles Benchmark</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="https://fb.me/react-0.12.2.min.js"></script>
+</head>
+<body>
+  <p>
+    This is a fork of <a href="http://jsfiddle.net/jashkenas/CGSd5/" target="_top">jashkenas's Ember/Backbone</a> benchmark. Note that this is just a simple benchmark: you wouldn't be doing this in an actual app.
+  </p>
+  <p>You may want to reload the page and give some warmup cicles before reading performance.</p>
+
+  <input type="text" placeholder="how many" value='1000' oninput="setN(this)">
+
+  <button onclick="runReact()">React</button>
+  <button onclick="runRawdog()">Vanilla</button>
+  <button onclick="runIncDOM()">IncrementalDOM hand coded</button>
+  <button onclick="runJSONML()">IncrementalDOM JSONML</button>
+
+  <p id="timing">&nbsp;</p>
+  <div id="grid"></div>
+
+  <script src="../../node_modules/incremental-dom/dist/incremental-dom-min.js"></script>
+  <script src="../../index.es5.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>

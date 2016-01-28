@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		sliding-box {
+			display: block;
+		}
+
+		sliding-box /deep/ .item {
+			border: 1px solid #000;
+			height: 70px;
+			display: block;
+			padding: 20px;
+			margin: 10px 0;
+		}
+
+		.item {
+			border: 1px solid #000;
+			height: 70px;
+			display: block;
+			padding: 20px;
+			margin: 10px 0;
+		}
+	</style>
+
+	<script src="../../node_modules/incremental-dom/dist/incremental-dom-min.js"></script>
+	<script src="../../index.es5.js"></script>
+
+	<script src="lib/webcomponents.min.js"></script>
+	<script src="lib/define_component.js"></script>
+
+	<script src="transformers.js"></script><!-- :) -->
+	<script src="updater.js"></script>
+</head>
+<body>
+	<p>This is a port of <a href="http://binarymuse.github.io/react-primer/build/index.html?6" target="_blank">binarymuse's shouldComponentUpdate demo for React</a>.</p>
+	<p>Webcomponents are used to implement a React like compenent life cycle, the <a href="https://github.com/google/incremental-dom/blob/master/demo/define_component.js" target="_blank">implementation</a> can be found in the official incremental-dom examples. This allows compenets to be used simply by tagname in JSONML like any other element. The passed shouldComponentUpdate method will decide when the component has to patch its own shadow root, instead of an explicit skip of descendants like in the <a href="http://paolocaminiti.github.io/jsonml2idom/demo/primer6/" target="_blank">plain primer6 demo</a>.</p>
+	<p>This is an interesting and still very simple and compact approach codewise, unfortunately, outside of Chrome this will require heavy polyfilling (about 100kb) and styling of elements is tricky with webcomponents specification still to come.</p>
+
+	<div id="approot"></div>
+
+<script>
+"use scrict";
+
+var approot = document.getElementById('approot')
+
+function randomItem() {
+	return {
+		id: '' + Math.random() * Date.now(),
+		width: 200 + Math.floor(Math.random() * 800),
+		color: '#' + Math.random().toString(16).substr(-6)
+	}
+}
+
+// a serializable central state
+var state = {
+	items: [
+		randomItem()
+	],
+	menu: {
+		addManyCount: 1000,
+	}
+}
+
+// components
+function shallowDiff (a, b) {
+	for (k in a) if (a[k] !== b[k]) return true
+	return false
+}
+
+defineComponent({
+	tag: 'sliding-box',
+	shouldComponentUpdate: shallowDiff,
+	render: function () {
+		var computedStyle = 'background: ' + this.props.color + '; width: ' + this.props.width + 'px';
+
+		jsonml2idom(['div.item', { style: computedStyle },
+					['div',
+						['input', {
+							type: 'text',
+							value: this.props.color,
+							oninput: transformers.item.colorChange,
+							ref: this.props.stateRef
+						}]
+					],
+					['div',
+						['input', {
+							type: 'range', min: '200', max: '1000',
+							value: new String(this.props.width),
+							oninput: transformers.item.widthChange,
+							// explorer range inputs will only fire on change
+							onchange: transformers.item.widthChange,
+							ref: this.props.stateRef
+						}]
+					],
+					['div.content', this.props.width],
+					['div',
+						['button', { onclick: transformers.item.remove, ref: this.props.stateRef }, 'remove']
+					]
+				])
+	}
+})
+
+defineComponent({
+	tag: 'app-menu',
+	shouldComponentUpdate: shallowDiff,
+	render: function () {
+		jsonml2idom(['div#menu', { key: 'appmenu' },
+					['input', { oninput: transformers.list.addManyCount, value: this.props.addManyCount }],
+					['button', { onclick: transformers.list.addMany },
+						'add to state.items' + ' (' + this.props.itemsLength + ')'
+					],
+					['button', { onclick: transformers.list.flush }, 'flush state.items'],
+					['button', { onclick: transformers.state.flush }, 'flush localStorage.state'],
+					['button', { onclick: transformers.state.animate }, 'animate']
+				])
+	}
+})
+
+// fragments
+function item (i) {
+	return ['sliding-box', {
+				key: i.id,
+				props: {
+					width: i.width,
+					color: i.color,
+					stateRef: i
+				}
+			}]
+}
+
+function app(s) {
+	return ['span',
+				['app-menu', {
+					key: 'appmenu',
+					props: {
+						addManyCount: state.menu.addManyCount,
+						itemsLength: state.items.length
+					}
+				}]
+			].concat(state.items.map(item))
+}
+
+// render update
+function update() {
+	IncrementalDOM.patch(approot, jsonml2idom, app(state))
+}
+
+// state persistance
+if (localStorage.state) state = JSON.parse(localStorage.state)
+window.__persistState = true
+window.addEventListener('beforeunload', function () {
+	if (__persistState) localStorage.state = JSON.stringify(state)
+})
+
+// bootstrap updates
+var up = Updater(update)
+up.batch()
+</script>
+</body>
+</html>
