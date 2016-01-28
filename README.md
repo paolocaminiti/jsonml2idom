@@ -49,7 +49,7 @@ function app(state) {
 }
 
 function update() {
-  IncrementalDOM.patch(node, jsonml, app(state))
+  IncrementalDOM.patch(node, jsonml2idom, app(state))
 }
 ```
 
