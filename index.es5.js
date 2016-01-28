@@ -1,4 +1,4 @@
-var jsonml = (function () {
+var jsonml2idom = (function () {
 	"use strict";
 
 	var elementOpenStart = IncrementalDOM.elementOpenStart

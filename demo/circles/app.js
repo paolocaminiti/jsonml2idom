@@ -226,12 +226,8 @@ var reset = function() {
 		return ['span'].concat(s.boxes.map(box))
 	}
 
-	function render(s) {
-		jsonml(app(s))
-	}
-
 	function update(data) {
-		patch(container, render, state)
+		patch(container, jsonml2idom, app(state))
 	}
 
 	function tick(b) {

@@ -77,9 +77,6 @@ function app(dbs) {
   ]
 }
 
-function render(data) {
-  jsonml(app(data))
-}
 // end of markup
 
 function main() {
@@ -94,7 +91,7 @@ function main() {
   }, I);
 
   function domUpdate() {
-    patch(document.body, render, dbs);
+    patch(document.body, jsonml2idom, app(dbs));
     requestAnimationFrame(domUpdate);
   }
   domUpdate();

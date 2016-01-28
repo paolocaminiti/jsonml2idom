@@ -104,7 +104,7 @@ function app(s) {
 
 // render update
 function update() {
-	IncrementalDOM.patch(approot, jsonml, app(state))
+	IncrementalDOM.patch(approot, jsonml2idom, app(state))
 }
 
 // state persistance

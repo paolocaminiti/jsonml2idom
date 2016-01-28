@@ -74,7 +74,7 @@ defineComponent({
 	render: function () {
 		var computedStyle = 'background: ' + this.props.color + '; width: ' + this.props.width + 'px';
 
-		jsonml(['div.item', { style: computedStyle },
+		jsonml2idom(['div.item', { style: computedStyle },
 					['div',
 						['input', {
 							type: 'text',
@@ -105,7 +105,7 @@ defineComponent({
 	tag: 'app-menu',
 	shouldComponentUpdate: shallowDiff,
 	render: function () {
-		jsonml(['div#menu', { key: 'appmenu' },
+		jsonml2idom(['div#menu', { key: 'appmenu' },
 					['input', { oninput: transformers.list.addManyCount, value: this.props.addManyCount }],
 					['button', { onclick: transformers.list.addMany },
 						'add to state.items' + ' (' + this.props.itemsLength + ')'
@@ -143,7 +143,7 @@ function app(s) {
 
 // render update
 function update() {
-	IncrementalDOM.patch(approot, jsonml, app(state))
+	IncrementalDOM.patch(approot, jsonml2idom, app(state))
 }
 
 // state persistance
