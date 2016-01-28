@@ -12,13 +12,13 @@ Your DOM is expressed by nested arrays as a simple data structure. You can compo
 Together with [Incremental DOM](https://github.com/google/incremental-dom) it allows efficient in place DOM mutations, letting UI be a function of state.
 
 ##### Live demos
-[circles](http://paolocaminiti.github.io/incremental-dom-jsonml/demo/circles), benchmark.
+[circles](http://paolocaminiti.github.io/jsonml2idom/demo/circles), benchmark.
 
-[dbmonster](http://paolocaminiti.github.io/incremental-dom-jsonml/demo/dbmonster), benchmark.
+[dbmonster](http://paolocaminiti.github.io/jsonml2idom/demo/dbmonster), benchmark.
 
-[primer6](http://paolocaminiti.github.io/incremental-dom-jsonml/demo/primer6), *shouldComponentUpdate* equivalent by skipping descendants.
+[primer6](http://paolocaminiti.github.io/jsonml2idom/demo/primer6), *shouldComponentUpdate* equivalent by skipping descendants.
 
-[primer6-webcomponents](http://paolocaminiti.github.io/incremental-dom-jsonml/demo/primer6-webcomponents), React like components lifecycle via webcomponents.
+[primer6-webcomponents](http://paolocaminiti.github.io/jsonml2idom/demo/primer6-webcomponents), React like components lifecycle via webcomponents.
 
 ##### Basic usage
 ```javascript
@@ -72,7 +72,7 @@ function update() {
 - *Function* in children positions will be called with the currentElement as first argument. This enables hooking during the rendering pass by incremental-dom. It should be used as a least resort (see advanced tricks instead), possibly by just collecting the element reference and defer execution once DOM patching is terminated.
 
 ##### Where is *shouldComponentUpdate*?
-- *{ skip: true, ... }* on an element will tell Incremental DOM to skip diffing it's descendants and resume traversal. This effectively let's you treat an element as a "component" root that doesn't need any update. Element _key is mandatory in this case. (See [primer6 demo](http://paolocaminiti.github.io/incremental-dom-jsonml/demo/primer6/) for possible usage).
+- *{ skip: true, ... }* on an element will tell Incremental DOM to skip diffing it's descendants and resume traversal. This effectively let's you treat an element as a "component" root that doesn't need any update. Element *key* is mandatory in this case. (See [primer6 demo](http://paolocaminiti.github.io/jsonml2idom/demo/primer6/) for possible usage).
 
 ##### Advanced tricks
 - A *style* attribute can be assigned both as a string or an object, [an object being mapped directly to style properties](http://google.github.io/incremental-dom/#rendering-dom/applying-styles).
@@ -86,22 +86,20 @@ function update() {
 ### Learn more
 Really that's all there is to learn.
 
-ES6 modules + [Redux](https://github.com/rackt/redux) seem a very good option to go along, allowing scalability while keeping things simple and real.
+ES6 modules + [Redux](https://github.com/rackt/redux) seem a very good option to go along, allowing scalability while keeping things simple and real. The combo worked very well in production for my company.
 
 I suggest reading the, short, [Incremental DOM documentation](http://google.github.io/incremental-dom/#about) and running one of their small examples in the debugger to get a full picture of what is going on.
 
 [http://www.jsonml.org/](http://www.jsonml.org/) may also be a source of related usefull infos.
 
 ### Server side rendering
-[Look here for experiments](https://github.com/paolocaminiti/incremental-dom-to-string) in this direction, turns out Incremental DOM API is really simple to map to string output.
+[Look here for experiments](https://github.com/paolocaminiti/idom2string) in this direction, turns out Incremental DOM API is really simple to map to string output.
 
 ### Browser compatibility
-
 Just the same as Incremental DOM itself, which by now seems to target IE9.
 
 ### Tests
 Once I settle on how to do it properly along with Incremental DOM.
 
 ### Opinions
-
-[Link to irrelevant rumblings](https://github.com/paolocaminiti/incremental-dom-jsonml/blob/master/OPINIONS.md) about performance and apps' architecture.
+[Link to irrelevant rumblings](https://github.com/paolocaminiti/jsonml2idom/blob/master/OPINIONS.md) about performance and apps' architecture.
