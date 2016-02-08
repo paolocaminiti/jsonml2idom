@@ -2,6 +2,10 @@
 <html>
 <head>
 	<style type="text/css">
+		body {
+			touch-action: manipulation;
+		}
+
 		sliding-box {
 			display: block;
 		}
@@ -73,31 +77,33 @@ defineComponent({
 	shouldComponentUpdate: shallowDiff,
 	render: function () {
 		var computedStyle = 'background: ' + this.props.color + '; width: ' + this.props.width + 'px';
-
-		jsonml2idom(['div.item', { style: computedStyle },
-					['div',
-						['input', {
-							type: 'text',
-							value: this.props.color,
-							oninput: transformers.item.colorChange,
-							ref: this.props.stateRef
-						}]
-					],
-					['div',
-						['input', {
-							type: 'range', min: '200', max: '1000',
-							value: new String(this.props.width),
-							oninput: transformers.item.widthChange,
-							// explorer range inputs will only fire on change
-							onchange: transformers.item.widthChange,
-							ref: this.props.stateRef
-						}]
-					],
-					['div.content', this.props.width],
-					['div',
-						['button', { onclick: transformers.item.remove, ref: this.props.stateRef }, 'remove']
-					]
-				])
+		
+		jsonml2idom(
+			['div.item', { style: computedStyle },
+				['div',
+					['input', {
+						type: 'text',
+						value: this.props.color,
+						oninput: transformers.item.colorChange,
+						ref: this.props.stateRef
+					}]
+				],
+				['div',
+					['input', {
+						type: 'range', min: '200', max: '1000',
+						value: new String(this.props.width),
+						oninput: transformers.item.widthChange,
+						// explorer range inputs will only fire on change
+						onchange: transformers.item.widthChange,
+						ref: this.props.stateRef
+					}]
+				],
+				['div.content', this.props.width],
+				['div',
+					['button', { onclick: transformers.item.remove, ref: this.props.stateRef }, 'remove']
+				]
+			]
+		)
 	}
 })
 
@@ -105,15 +111,17 @@ defineComponent({
 	tag: 'app-menu',
 	shouldComponentUpdate: shallowDiff,
 	render: function () {
-		jsonml2idom(['div#menu', { key: 'appmenu' },
-					['input', { oninput: transformers.list.addManyCount, value: this.props.addManyCount }],
-					['button', { onclick: transformers.list.addMany },
-						'add to state.items' + ' (' + this.props.itemsLength + ')'
-					],
-					['button', { onclick: transformers.list.flush }, 'flush state.items'],
-					['button', { onclick: transformers.state.flush }, 'flush localStorage.state'],
-					['button', { onclick: transformers.state.animate }, 'animate']
-				])
+		jsonml2idom(
+			['div#menu', { key: 'appmenu' },
+				['input', { oninput: transformers.list.addManyCount, value: this.props.addManyCount }],
+				['button', { onclick: transformers.list.addMany },
+					'add to state.items' + ' (' + this.props.itemsLength + ')'
+				],
+				['button', { onclick: transformers.list.flush }, 'flush state.items'],
+				['button', { onclick: transformers.state.flush }, 'flush localStorage.state'],
+				['button', { onclick: transformers.state.animate }, 'animate']
+			]
+		)
 	}
 })
 
