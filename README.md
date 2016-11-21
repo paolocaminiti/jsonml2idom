@@ -30,7 +30,7 @@ function action(e) {
 function item(i, index) {
 	return (
 		['li',
- 			['div.class-1.class-2', { style: 'color: blue;' }
+ 			['div.class-1.class-2', { style: 'color: cyan;' },
       			`item: ${index} `, i.text
     		],
     		['button', { onclick: action, stateRef: i }]
@@ -44,7 +44,7 @@ function list(state) {
 
 function app(state) {
 	return (
-		['#approot', { style: { color: 'black' } },
+		['#approot', { style: { backgroundColor: 'hotpink' } },
     		['p', 'A list in an app'],
     		list(state)
   		]
