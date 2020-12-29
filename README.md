@@ -23,36 +23,37 @@ Together with [Incremental DOM](https://github.com/google/incremental-dom) it al
 ##### Basic usage
 ```javascript
 function action(e) {
-	var text = e.target.stateRef.text
-	console.log(text)
+  var text = e.target.stateRef.text
+  console.log(text)
 }
 
 function item(i, index) {
-	return (
-		['li',
- 			['div.class-1.class-2', { style: 'color: cyan;' },
-      			`item: ${index} `, i.text
-    		],
-    		['button', { onclick: action, stateRef: i }]
-  		]
-	)
+  return (
+    ['li',
+      ['div.class-1.class-2', { style: 'color: cyan;' },
+        `item: ${index} `, i.text
+      ],
+	  ['button', { onclick: action, stateRef: i }]
+    ]
+  )
 }
 
 function list(state) {
-	return ['ul', ...state.list.map(item)]
+  return ['ul', ...state.list.map(item)]
 }
 
 function app(state) {
-	return (
-		['#approot', { style: { backgroundColor: 'hotpink' } },
-    		['p', 'A list in an app'],
-    		list(state)
-  		]
-	)
+  return (
+    ['#approot', { style: { backgroundColor: 'hotpink' } },
+      ['p', 'A list in an app'],
+        list(state)
+      ]
+	]
+  )
 }
 
 function update() {
-	IncrementalDOM.patch(node, jsonml2idom, app(state))
+  IncrementalDOM.patch(node, jsonml2idom, app(state))
 }
 ```
 
