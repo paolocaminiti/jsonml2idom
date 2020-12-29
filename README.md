@@ -46,8 +46,7 @@ function app(state) {
   return (
     ['#approot', { style: { backgroundColor: 'hotpink' } },
       ['p', 'A list in an app'],
-        list(state)
-      ]
+      list(state)
     ]
   )
 }
