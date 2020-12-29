@@ -33,7 +33,7 @@ function item(i, index) {
       ['div.class-1.class-2', { style: 'color: cyan;' },
         `item: ${index} `, i.text
       ],
-	  ['button', { onclick: action, stateRef: i }]
+      ['button', { onclick: action, stateRef: i }]
     ]
   )
 }
@@ -48,7 +48,7 @@ function app(state) {
       ['p', 'A list in an app'],
         list(state)
       ]
-	]
+    ]
   )
 }
 
